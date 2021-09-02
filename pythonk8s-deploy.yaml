@@ -57,26 +57,6 @@ spec:
               number: 80
         path: /
         pathType: Prefix
-  - host: nodejsapp.testdomainname.gq 
-    http:
-      paths:
-      - backend:
-          service:
-            name: nodejs-app
-            port:
-              number: 80
-        path: /
-        pathType: Prefix
-  - host: javawebapp.testdomainname.gq 
-    http:
-      paths:
-      - backend:
-          service:
-            name: javaapp
-            port:
-              number: 80
-        path: /
-        pathType: Prefix
 - host: pythonapp.testdomainname.gq 
     http:
       paths:
