@@ -1,0 +1,89 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: python-app
+  namespace: default
+  labels:
+    app: python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+      - name: python-app
+        image: "abhilashnarayan/abhilashnarayan/pythonapp:latest"
+        ports:
+          - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-app
+  namespace: default
+spec:
+  selector:
+    app: python-app
+  type: LoadBalancer
+  ports:
+  - name: http
+    targetPort: 3000
+    port: 80
+    
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: nginxapp.testdomainname.gq 
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx-web
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: nodejsapp.testdomainname.gq 
+    http:
+      paths:
+      - backend:
+          service:
+            name: nodejs-app
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: javawebapp.testdomainname.gq 
+    http:
+      paths:
+      - backend:
+          service:
+            name: javaapp
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+- host: pythonapp.testdomainname.gq 
+    http:
+      paths:
+      - backend:
+          service:
+            name: python-app
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
